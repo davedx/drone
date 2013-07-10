@@ -50,9 +50,11 @@ describe("Users add products to cart", function () {
 	});
 
 	it("should add a product to a cart", function (done) {
-		// maybe you can do this, or maybe you use jQuery to fake an click event on an 'add product' button:
+		// maybe you can do something like this
+		// or maybe you use jQuery to fake an click event on an 'add product' button
 		app.clickButton({id: add}, function() {
-			// maybe there's a webservice call in your frontend that calls this callback when it gets a response
+			// perhaps there's a webservice call in your frontend that
+			// calls back when it gets a response
 			assert($('#cart_counter').html() == '1');
 			assert(app.session.cart.count == 1);
 			done();
