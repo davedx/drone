@@ -11,8 +11,8 @@ There are plenty of existing test frameworks and runners out there, but figuring
 * Remote or console.log based reporting
 * Simple async/sync support: functions with a callback parameter are treated as async; functions without aren't
 
-Configuration
-=============
+Configuration & Running
+-----------------------
 
 1. Include Runner.js
 2. Include your test specs (see below for examples)
