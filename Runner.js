@@ -1,5 +1,5 @@
 Runner = (function () {
-	var reporterFn = console.log;
+	var reporterFn = console.debug.bind(console);
 	var specs = [];
 
 	var current = 0;
