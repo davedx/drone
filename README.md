@@ -11,8 +11,14 @@ There are plenty of existing test frameworks and runners out there, but figuring
 * Remote or console.log based reporting
 * Simple async/sync support: functions with a callback parameter are treated as async; functions without aren't
 
+Supported configurations
+---
+
+* In-browser: include Runner.js in a plain old script tag and run it with Runner.run()
+* Headless testing: see the Using Phantomjs example
+ 
 Configuration & Running
------------------------
+---
 
 1. Include Runner.js
 2. Include your test specs (see below for examples)
