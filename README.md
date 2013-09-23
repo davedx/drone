@@ -15,7 +15,7 @@ Supported configurations
 ---
 
 * In-browser: include Runner.js in a plain old script tag and run it with Runner.run()
-* Headless testing: see the Using Phantomjs example
+* Headless testing, including CI: see the [Phantomjs example](https://github.com/davedx/drone/tree/master/examples)
  
 Configuration & Running
 ---
