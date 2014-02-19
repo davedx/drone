@@ -16,6 +16,7 @@ Supported configurations
 
 * In-browser: include Runner.js in a plain old script tag and run it with Runner.run()
 * Headless testing, including CI: see the [Phantomjs example](https://github.com/davedx/drone/tree/master/examples)
+* With [karma-runner](http://karma-runner.github.io/0.10/index.html): use the KarmaAdapter (see example below)
  
 Configuration & Running
 ---
@@ -69,3 +70,13 @@ describe("Users add products to cart", function () {
 });
 ```
 
+Example: as part of a karma run
+
+```
+	var __karma__ = window.__karma__;
+	__karma__.start = function () {
+		var karmaAdapter = new KarmaAdapter(__karma__, true);
+		Runner.reporter(karmaAdapter.report, false);
+		Runner.run(null, karmaAdapter.finished);
+	};
+```
