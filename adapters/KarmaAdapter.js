@@ -1,6 +1,6 @@
 // driver for karma
-var KarmaAdapter = function(karmaReporter) {
-	this.reporter = karmaReporter;
+var KarmaAdapter = function(karma) {
+	this.reporter = karma;
 	this.logs = [];
 	this.asserts = [];
 	var lastDate = new Date();
@@ -27,12 +27,18 @@ var KarmaAdapter = function(karmaReporter) {
 
 	this.finished = function() {
 		// send everything to karma
-		karmaReporter.start(this.asserts.length);
+		karma.info({
+      total: this.asserts.length
+    });
 
 		for(var i=0; i<this.asserts.length; i++) {
-			karmaReporter.result(this.asserts[i]);
+			karma.result(this.asserts[i]);
 		}
+		
 		// finish
-		karmaReporter.finish();
+		karma.complete({
+      coverage: __coverage__
+    });
+
 	}.bind(this);
 };
