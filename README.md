@@ -23,7 +23,7 @@ Configuration & Running
 
 1. Include Runner.js
 2. Include your test specs (see below for examples)
-3. Invoke Runner.run() directly or use a keypress trigger (see bottom of Runner.js for examples)
+3. Invoke Runner.run() directly, or use a keypress trigger: Runner.trigger({keydown: keycode})
 
 Example: synchronous test (suited to unit tests)
 
