@@ -7,8 +7,9 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
   };
 };
 
-Runner = (function () {
-	var reporterFn = console.debug.bind(console);
+var Runner = (function () {
+	var reporterFn = Function.prototype.bind.call(console.log, console);
+	var concatMessages = true;
 	var configuration = {
 		asyncTimeout: 2500
 	};
@@ -28,9 +29,9 @@ Runner = (function () {
 			return nextSpec();
 		var f = q.shift();
 		if(f.desc)
-			reporterFn(f.desc);
+			Runner.log('TEST', f.desc);
 		if(f.fn.length) {
-			var timeout = window.setTimeout(function() { assert('TIMEOUT  ' + f.desc, false); nextTest(q) }, configuration.asyncTimeout);
+			var timeout = window.setTimeout(function() { assert('TIMEOUT  ' + f.desc, false); nextTest(q); }, configuration.asyncTimeout);
 			f.fn(function () {
 				window.clearTimeout(timeout);
 				nextTest(q);
@@ -48,7 +49,8 @@ Runner = (function () {
 			}
 		}
 
-		if(current == specs.length) {
+		if(current === specs.length) {
+			Runner.log('FINISHED', fails === 0);
 			finished && finished(fails);
 			return;
 		}
@@ -68,16 +70,25 @@ Runner = (function () {
 		}
 		if(queueAfter)
 			q.push({fn: queueAfter});
-		reporterFn(specs[current].desc);
+		Runner.log('SPEC', specs[current].desc);
 		current++;
 		nextTest(q);
 	};
 	return {
-		reporter: function (fn) {
+		reporter: function (fn, concat) {
 			reporterFn = fn;
+			concatMessages = concat;
 		},
-		log: function (msg) {
-			reporterFn(msg);
+		log: function () {
+			var args = Array.prototype.slice.call(arguments, 0);
+			if(concatMessages) {
+				var msg = args[1];
+				if(args.length === 3)
+					msg += (': ' + (args[2] ? 'PASSED' : 'FAILED'));
+				reporterFn(msg);
+			}	else {
+				reporterFn(args);
+			}
 		},
 		configure: function (cfg) {
 			configuration = cfg;
@@ -85,15 +96,16 @@ Runner = (function () {
 		trigger: function (opts) {
 			if(opts.keydown && window) {
 				window.addEventListener("keydown", function (e) {
-					if(e.keyCode == opts.keydown) {
+					if(e.keyCode === opts.keydown) {
 						Runner.run(opts.filter);
 					}
 				});
 			}
 		},
 		run: function (filter, finishedCallback) {
-			reporterFn("**** Starting tests [filter: "+filter+"] ****");
+			Runner.log('START', "**** Starting tests [filter: "+filter+"] ****");
 			current = 0;
+
 			finished = finishedCallback;
 			specFilter = filter;
 			nextSpec();
@@ -144,7 +156,8 @@ it = function (desc, fn) {
 xit = function (desc, fn) {};
 
 assert = function (desc, expression) {
-	Runner.log((expression ? "PASS" : "FAIL") + "  " + desc);
+	Runner.log('ASSERT', desc, expression);
+	//Runner.log(expression, desc);
 	if(!expression)
 		Runner.countFails();
 };
